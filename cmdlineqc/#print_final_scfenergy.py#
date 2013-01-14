@@ -1,0 +1,44 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import os, sys, logging
+import argparse
+from cclib.parser import ccopen
+import quantities as pq
+
+kilojoule = pq.UnitQuantity('kilojoule',  pq.joule * 1e3,  symbol = 'kJ')
+kilocalorie = pq.UnitQuantity('kilocalorie',  pq.calorie * 1e3,  symbol = 'kCal')
+
+UNITLESS_IN_HARTREE_TO_TYPED_KILOJOULE_PER_MOL = \
+    (pq.hartree * pq.constants.Avogadro_constant).rescale(kilojoule / pq.mol)
+
+UNITLESS_IN_ELECTRONVOLT_TO_TYPED_KILOJOULE_PER_MOL = \
+    (pq.eV * pq.constants.Avogadro_constant).rescale(kilojoule / pq.mol)
+
+UNITLESS_IN_HARTREE_TO_TYPED_KILOJOULE_PER_MOL = \
+    (pq.hartree * pq.constants.Avogadro_constant).rescale(kilojoule / pq.mol)
+
+UNITLESS_IN_ELECTRONVOLT_TO_TYPED_KILOJOULE_PER_MOL = \
+    (pq.eV * pq.constants.Avogadro_constant).rescale(kilojoule / pq.mol)
+
+
+def main(job_files,
+         at_exe = False,
+         suffix = ''):
+    """
+    Extracts final energy from log file and prints it in Hartree
+    (output formats supported are those of cclib)
+    """
+    for job_file in job_files:
+        ccfile = ccopen(job_file)
+        ccfile.logger.setLevel(logging.ERROR)
+        data = ccfile.parse()
+        print data.scfenergies[-1]
+
+    return os.EX_OK
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=main.__doc__)
+    parser.add_argument('job_files',nargs='+',type=str,help='or log-files')
+    args = parser.parse_args()
+    sys.exit(main(**vars(args)))
