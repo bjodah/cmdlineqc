@@ -28,8 +28,8 @@ def main(log_files,
     """
     results = []
     for i, log_file in enumerate(log_files):
-        struct = QCResult(log_file)
-        prop_getter = getattr(struct, property)
+        qcres = QCResult(log_file)
+        prop_getter = getattr(qcres, property)
         args = arguments.split(',')
         if args == ['']: args = []
         val = prop_getter(*args)

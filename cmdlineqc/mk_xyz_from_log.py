@@ -49,7 +49,9 @@ def main(job_files,
             destpath = rootname + suffix + '.xyz'
 
         obconv.WriteFile(obmol, destpath)
-        return os.EX_OK
+
+    return os.EX_OK
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=main.__doc__)
