@@ -10,6 +10,11 @@ from cclib.parser import ccopen
 from cclib.bridge import makeopenbabel
 import openbabel as ob
 
+def get_open_babel_conv(outformat = 'XYZ'):
+    obconv = ob.OBConversion()
+    ok = obconv.SetOutFormat(outformat)
+    return obconv
+
 def main(job_files,
          at_src = False,
          suffix = '',
@@ -20,6 +25,9 @@ def main(job_files,
     Extracts xyz data from log file of QC calculation
     (output formats supported are those of cclib)
     """
+
+    obconv = get_open_babel_conv()
+
     for job_file in job_files:
         ccfile = ccopen(job_file)
         ccfile.logger.setLevel(logging.ERROR)
@@ -32,8 +40,6 @@ def main(job_files,
         obmol.SetTitle('SRC={}, CHARGE={}, MULT={}'.format(job_file,
                                                            data.charge,
                                                            data.mult))
-        obconv = ob.OBConversion()
-        ok = obconv.SetOutFormat("XYZ")
         dirname = os.path.dirname(job_file)
         basename = os.path.basename(job_file)
         rootname, ext = os.path.splitext(basename)
@@ -43,6 +49,7 @@ def main(job_files,
             destpath = rootname + suffix + '.xyz'
 
         obconv.WriteFile(obmol, destpath)
+        return os.EX_OK
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=main.__doc__)
