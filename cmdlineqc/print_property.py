@@ -59,7 +59,8 @@ if __name__ == '__main__':
                         ' '.join([prop_getter.func_name + ': ' + ', '.join(inspect.getargspec(prop_getter)[0]) for \
                                   prop_getter in QCResult.qc_properties]))
     parser.add_argument('-u', '--unit', type=str, default = '', help='Choose from: ' + \
-                        ' '.join([prop_getter.func_name + ': ' + ', '.join(defs.UNITS[prop_getter.unit_type].keys()) + '(default: {})'.format(QCResult.default_units[prop_getter.unit_type]) for prop_getter in \
+                        ' '.join([prop_getter.func_name + ': ' + ', '.join(map(str,defs.UNITS[prop_getter.unit_type].keys())) +\
+                                  '(default: {})'.format(QCResult.default_units[prop_getter.unit_type]) for prop_getter in \
                                   QCResult.qc_properties]))
     parser.add_argument('-s', '--supress_unit', action = 'store_true', default = False, help='Supress explicit printing of unit')
     parser.add_argument('-w', '--with_filename', action = 'store_true', default = False, help='Print logfile name before each property value.')
@@ -67,4 +68,3 @@ if __name__ == '__main__':
     parser.add_argument('log_files',nargs='+',type=str,help='log-files from quantum chemical comp.')
     args = parser.parse_args()
     sys.exit(main(**vars(args)))
-

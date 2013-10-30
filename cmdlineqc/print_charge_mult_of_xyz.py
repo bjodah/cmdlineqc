@@ -4,7 +4,8 @@
 import os, sys
 import argparse
 import logging
-import re
+
+from moolecule import parse_charge_mult
 
 def main(xyz_path, fmtstr = '{} {}'):
     """
@@ -17,8 +18,7 @@ def main(xyz_path, fmtstr = '{} {}'):
     title_line = fh.readline() # Title is second row in xyz file
     fh.close()
     logging.debug('Read title line: {}'.format(title_line))
-    charge = re.search('(?<=CHARGE\=)-?\w', title_line)
-    mult = re.search('(?<=MULT\=)\w', title_line)
+    charge, mult = parse_charge_mult(line)
     if charge == None or mult == None:
         sys.exit(1)
     return fmtstr.format(charge.group(0), mult.group(0))
@@ -29,4 +29,3 @@ if __name__ == '__main__':
     args = parser.parse_args()
     print main(**vars(args))
     sys.exit(os.EX_OK)
-

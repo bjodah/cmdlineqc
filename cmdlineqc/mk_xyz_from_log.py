@@ -56,7 +56,7 @@ def main(job_files,
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=main.__doc__)
     parser.add_argument('-a', '--at-src', action = 'store_true',
-                        help = 'Create xyz in directory of source instead of at source')
+                        help = 'Create xyz in directory of source instead of in working dir.')
     parser.add_argument('-s', '--suffix', type = str, default = '',
                         help = 'Suffix for xyz file, e.g. `_final`')
     parser.add_argument('-d', '--distort_normal', type = float, default = 0.0,
@@ -69,4 +69,3 @@ if __name__ == '__main__':
     parser.add_argument('job_files',nargs='+',type=str,help='com- or log-files')
     args = parser.parse_args()
     sys.exit(main(**vars(args)))
-
